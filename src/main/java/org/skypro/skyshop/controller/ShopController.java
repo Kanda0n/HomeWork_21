@@ -36,4 +36,8 @@ public class ShopController {
     public Collection<SearchResult> search(@RequestParam String pattern) {
         return searchService.search(pattern);
     }
+    @GetMapping
+    public String hello() {
+        return "Hello, world! String to create PullRequest!";
+    }
 }
