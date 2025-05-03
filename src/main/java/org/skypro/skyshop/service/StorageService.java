@@ -5,24 +5,28 @@ import org.skypro.skyshop.model.article.Article;
 import org.skypro.skyshop.model.search.Searchable;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 @Service
 public class StorageService {
     private final Map<UUID, Product> products = new HashMap<>();
     private final Map<UUID, Article> articles = new HashMap<>();
+    private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
     public StorageService() {
         initializeTestData();
     }
 
     private void initializeTestData() {
-        products.put(UUID.randomUUID(), new SimpleProduct(UUID.randomUUID(), "Гречка", 80));
-        products.put(UUID.randomUUID(), new DiscountedProduct(UUID.randomUUID(), "Кола", 100, 20));
+        products.computeIfAbsent(UUID.randomUUID(), id -> new SimpleProduct(id, "Гречка", 80));
+        products.computeIfAbsent(UUID.randomUUID(), id -> new DiscountedProduct(id, "Кола", 100, 20));
 
-        articles.put(UUID.randomUUID(), new Article(UUID.randomUUID(),
+        articles.computeIfAbsent(UUID.randomUUID(), id -> new Article(id,
                 "Как готовить гречку", "Гречку нужно варить 20 минут."));
-        articles.put(UUID.randomUUID(), new Article(UUID.randomUUID(),
+        articles.computeIfAbsent(UUID.randomUUID(), id -> new Article(id,
                 "История Кока-Колы", "Кока-Кола была изобретена в 1886 году."));
     }
 
@@ -39,5 +43,9 @@ public class StorageService {
         result.addAll(products.values());
         result.addAll(articles.values());
         return result;
+    }
+
+    public Optional<Product> getProductById(UUID id) {
+        return Optional.ofNullable(products.get(id));
     }
 }
