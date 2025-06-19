@@ -62,6 +62,6 @@ public class ShopController {
 
     @GetMapping
     public String hello() {
-        return "Home work 23!";
+        return "Home work 24!";
     }
 }
